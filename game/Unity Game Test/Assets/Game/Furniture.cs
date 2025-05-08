@@ -6,6 +6,7 @@ public class Furniture : MonoBehaviour
     public BoundsInt area; //Dimension of furniture on tilemap
 
     private void OnMouseDown(){
+        //Delete Furniture
         if (GameManager.currentManager.editMode && GameManager.currentManager.deleteMode && Placed) {
             GameManager.currentManager.ClearArea();
             Furniture copy = Instantiate(this, Vector3.zero, Quaternion.identity).GetComponent<Furniture>(); 
@@ -14,6 +15,7 @@ public class Furniture : MonoBehaviour
             GameManager.currentManager.SetTemp(copy);
             Destroy(copy);
         }
+        //Edit Furniture
         else if(GameManager.currentManager.editMode && !GameManager.currentManager.deleteMode && Placed) {
             GameManager.currentManager.ClearArea();
             Furniture copy = Instantiate(this, Vector3.zero, Quaternion.identity).GetComponent<Furniture>(); 
