@@ -81,7 +81,12 @@ def get_weekly_emissions(year, week):
     # Calculate daily total emissions
     for log in logs:
         weekday = log.start_time.strftime("%A")
-        carbon = log.get_carbon()
+
+        try:
+            carbon = float(log.get_carbon())
+        except (TypeError, ValueError):
+            carbon = 0.0
+
         daily_totals[weekday] += carbon
 
         if log.template_type == LogTypes.trip:
@@ -123,4 +128,4 @@ def redirect_to_latest_week():
     else:
         week -= 1
 
-    return redirect(url_for("graph.dashboard", year=year, week=week - 1))
+    return redirect(url_for("graph.dashboard", year=year, week=week))

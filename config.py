@@ -3,7 +3,7 @@ from database.dbconfig import Database
 from flask import Flask
 from argon2 import PasswordHasher
 from logconfig import logger
-import os
+import os, atexit
 from flask_qrcode import QRcode
 
 load_dotenv()
@@ -21,6 +21,7 @@ app.config['RECAPTCHA_PRIVATE_KEY'] = os.getenv('RECAPTCHA_PRIVATE_KEY')
 
 # Database Setup
 tunnel = Database.start_tunnel()
+atexit.register(Database.stop_tunnel,tunnel)
 db = Database.setup(app, tunnel)
 ph = PasswordHasher()
 
@@ -39,6 +40,6 @@ app.config['RECAPTCHA_PUBLIC_KEY']  = os.getenv('RECAPTCHA_PUBLIC_KEY')
 app.config['RECAPTCHA_PRIVATE_KEY'] = os.getenv('RECAPTCHA_PRIVATE_KEY')
 
 
-from app_email import init_app as init_email_module
-init_email_module(app)
+#from app_email import init_app as init_email_module
+#init_email_module(app)
 

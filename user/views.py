@@ -4,7 +4,7 @@ import pyotp
 from argon2 import PasswordHasher
 from database.enums import Roles
 from database.tables import User
-#from app_email.tasks import send_verification_email
+from app_email.tasks import send_verification_email
 from user.forms import RegistrationForm, LoginForm
 from config import db
 
@@ -53,11 +53,10 @@ def login():
                     user.update_mfa()
                 flash('Login Successful', category='success')
                 login_user(user)
-                if not user.emailSent():
-                    #send_verification_email(user)
-                    pass
+                if not user.email_sent():
+                    send_verification_email(user)
                 return redirect(url_for('user.profile'))
-            if not user.mfa_enabled():
+            if not user.mfa_enabled:
                 flash('MFA must be enabled before account use', category='warning')
                 uri = str(pyotp.totp.TOTP(user.mfa_key).provisioning_uri(user.email, "Carbon Cruncher"))
                 return render_template('user/mfasetup.html', secret=user.mfa_key, uri=uri)
@@ -68,7 +67,7 @@ def login():
 @user_bp.route('/profile')
 @login_required
 def profile():
-    return render_template('user/profile.html')
+    return render_template('user/profile.html', current_user = current_user)
 
 @user_bp.route('/logout')
 @login_required

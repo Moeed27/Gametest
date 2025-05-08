@@ -1,7 +1,7 @@
 {% extends "base.html" %}
+{% block title %}Carbon Cruncher - MFA Setup{% endblock %}
 
 {% block content %}
-    <h1>Multi-Factor Authentication Setup</h1>
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% for category, message in messages %}
             <div class="alert alert-{{ category }} mt-3 alert-dismissible" role="alert">
@@ -13,12 +13,16 @@
             </div>
         {% endfor %}
     {% endwith %}
-    <p>Open Microsoft Authenticator or Google Authenticator</p>
-    <p>Select Add New Account</p>
-    <p>Manually Enter or Scan the QR Code Below</p>
-    <h2>Code</h2>
-    <p>{{ secret }}</p>
-    <h2>QR</h2>
-    <img src="{{ qrcode(uri, box_size=5, border=5) }}">
-    <p>Once you have entered the link please click <a href="./login">here</a></p>
+    <h1 class="text-center" style="padding-top: 50px; font-size: 50px">MFA setup</h1>
+    <h3 class="text-center" style="padding-top: 20px; font-size: 20px">Almost there! Please set up<br>multi-factor authentication<br>to validate your account</h3>
+    <div style="padding-top: 50px; width:50%;" class="text-center container">
+        <p>Open Microsoft Authenticator or Google Authenticator</p>
+        <p>Select Add New Account</p>
+        <p>Manually Enter or Scan the QR Code Below</p>
+        <h2>Code</h2>
+        <p>{{ secret }}</p>
+        <h2>QR</h2>
+        <img src="{{ qrcode(uri, box_size=5, border=5) }}">
+        <p>Once you have entered the link please click <a href="./login">here</a></p>
+    </div>
 {% endblock %}

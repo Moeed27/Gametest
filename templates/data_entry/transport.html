@@ -1,8 +1,10 @@
 {% extends "base.html" %}
+{% block title %}Carbon Cruncher - Log Transport{% endblock %}
 
 {% block content %}
     <div class="container">
-    <h1>Transport Form</h1>
+    <h1 class="text-center" style="padding-top: 50px; font-size: 50px">Transport</h1>
+    <h3 class="text-center" style="padding-top: 20px; font-size: 20px">Log your use of any public or private transport<br>including the distance<br>and the use time</h3>
     <div class="p-2 row">
         <div class="col-3"></div>
         <div class="col-6">
@@ -14,14 +16,18 @@
                             {{ form.transport.label}}<span style="color: red">*</span>
                             {{ form.transport(class="form-control") }}
                         </div>
-                        <div class="form-group">
-                            {{ form.start_time.label}}<span style="color: red">*</span>
-                            {{ form.start_time(class="form-control") }}
-                        </div>
-                        <div class="form-group">
-                            {{ form.end_time.label}}<span style="color: red">*</span>
-                            {{ form.end_time(class="form-control") }}
-                        </div>
+<div class="form-group">
+    {{ form.start_time.label }}<span style="color: red">*</span>
+    {{ form.start_time(class="form-control", type="datetime-local") }}
+</div>
+<div class="form-group">
+    {{ form.end_time.label }}<span style="color: red">*</span>
+    {{ form.end_time(class="form-control", type="datetime-local") }}
+</div>
+<div class="form-group">
+    {{ form.distance_unit.label }}<span style="color: red">*</span>
+    {{ form.distance_unit(class="form-control") }}
+</div>
                         <div class="form-group">
                             {{ form.distance.label}}<span style="color: red">*</span>
                             {{ form.distance(class="form-control") }}
@@ -31,8 +37,8 @@
                             {{ form.is_public(class="form-control") }}
                         </div>
                     </div>
-                    <div>
-                        {{ form.submit(class="btn btn-success") }}
+                    <div style="padding-top:20px; width:50%" class="container-fluid">
+                        {{ form.submit(class="btn btn-success",style="width:100%;") }}
                     </div>
                 </div>
             </form>

@@ -7,7 +7,7 @@ from . import utils  # Import the utils module for token generation and email se
 
 def send_verification_email(user):
     # Generate a unique token for email verification
-    token = utils.generate_token(user.id, salt='email-confirm')
+    token = utils.generate_token(user.get_id(), salt='email-confirm')
     # Construct verification URL (absolute URL)
     verify_url = url_for('email_bp.verify_email', token=token, _external=True)
     # Render the email template with the verification link

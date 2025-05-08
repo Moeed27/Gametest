@@ -31,3 +31,7 @@ def leaderboard():
         all_friends_ordered.append(all_friends[i])
 
     return render_template('game/leaderboard.html', users = all_friends_ordered, len=len(all_friends_ordered))
+
+@game_bp.route('/game')
+def game():
+    return render_template('game/game.html')

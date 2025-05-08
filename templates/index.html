@@ -1,5 +1,13 @@
 {% extends "base.html" %}
+{% block title %}Carbon Cruncher - Home Page{% endblock %}
 
 {% block content %}
-<h1>CSC2033 Project</h1>
+
+
+<h1 class="text-center" style="padding-top: 50px; font-size: 75px">CARBON CRUNCHER</h1>
+<h2 class="text-center" style="padding-top : 20px; font-size: 50px">Creating a better world, one day at a time!</h2>
+<h3 class="text-center" style="padding-top: 20px; font-size: 20px">Welcome to Carbon Cruncher! Here you can earn Ecopoints by recording all the ways you improve your carbon footprint every day! <br><br> Log in / Register from the top bar! </h3>
+
+<iframe src="{{url_for('game.game')}}"></iframe>
+
 {% endblock %}

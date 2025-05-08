@@ -1,56 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Carbon Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        body {
-            font-family: sans-serif;
-            margin: 20px;
-        }
+{% extends "base.html" %}
+{% block title %}Carbon Cruncher - Dashboard{% endblock %}
 
-        .dashboard {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            grid-template-rows: auto auto;
-            gap: 20px;
-        }
+{% block content %}
+<style>
 
-        .card {
-            padding: 20px;
-            border-radius: 12px;
-            background-color: #f4f4f4;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
+    .dashboard {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        grid-template-rows: auto auto;
+        gap: 20px;
+    }
 
-        #total-emissions {
-            font-size: 2.5em;
-            font-weight: bold;
-            color: #000000;
-        }
+    .card {
+        padding: 20px;
+        border-radius: 12px;
+        background-color: #f4f4f4;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-        #dayDetail {
-            margin-top: 10px;
-            font-size: 1.2em;
-        }
-    </style>
-</head>
-<body>
+    #total-emissions {
+        font-size: 2.5em;
+        font-weight: bold;
+        color: #000000;
+    }
 
-<h2>Carbon Footprint Dashboard</h2>
+    #dayDetail {
+        margin-top: 10px;
+        font-size: 1.2em;
+    }
+</style>
 
-<div style="margin-bottom: 20px;">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<h1 class="text-center" style="padding-top: 50px; font-size: 50px">Your dashboard</h1>
+<h3 class="text-center" style="padding-top: 20px; font-size: 20px">Look at your profile and past logs!</h3>
+<h2 class="text-center" style="padding-top:20px; font-size: 30px"> Profile </h2>
+<div style="padding-top: 20px; width: 50%;" class="container text-center">
+    <h3>Username: {{current_user.username}}
+        {% if current_user.is_admin %}
+         [ADMIN]
+        {% endif %}
+    </h3>
+    <h3>Real name: {{current_user.first_name}} {{current_user.last_name}}</h3>
+    <h3>Email address: {{current_user.email}}</h3>
+    <h3><img src="{{url_for('static', filename='coin.png')}}" width="50px">Ecopoints: {{current_user.ecopoints}}</h3>
+</div>
+
+<h2 class="text-center" style="padding-top:20px; font-size: 30px"> Carbon Logs </h2>
+
+<div style="padding-top: 20px; width:50%" class="container text-center">
     <label for="yearSelect">Year:</label>
     <input type="number" id="yearSelect" min="2000" max="2100" value="2025">
 
     <label for="weekSelect">Week:</label>
     <input type="number" id="weekSelect" min="1" max="53" value="1">
-
-    <button onclick="goToWeek()">View</button>
+    <br><br>
+    <button onclick="goToWeek()" class="navicon-light" style="background-color: #8ad87d;width: 40%; border-radius: 25px 25px 25px 25px; margin: 0;  border: 4px; border-style: solid; border-color: #54834c; display: inline-block;">View</button>
 </div>
 
-<div class="dashboard">
+<div class="dashboard container" style="width:85%;">
 
     <div class="card" style="grid-column: 1; grid-row: 1;">
         <div>Total Emissions</div>
@@ -74,7 +82,7 @@
         const week = document.getElementById('weekSelect').value;
 
         if (year && week >= 1 && week <= 53) {
-            window.location.href = `/graph/dashboard/${year}/${week}`;
+            window.location.href = `/dashboard/${year}/${week}`;
         } else {
             alert("Please enter a valid year and week number (1–53).");
         }
@@ -82,13 +90,13 @@
 
     async function loadData() {
         const pathParts = window.location.pathname.split('/');
-        const year = pathParts[3];
-        const week = pathParts[4];
+        const year = pathParts[2];
+        const week = pathParts[3];
 
         document.getElementById("yearSelect").value = year;
         document.getElementById("weekSelect").value = week;
 
-        const apiUrl = `/graph/weekly_emissions/${year}/${week}`;
+        const apiUrl = `/weekly_emissions/${year}/${week}`;
         const res = await fetch(apiUrl);
         const data = await res.json();
 
@@ -146,4 +154,4 @@
 
 
 </body>
-</html>
+{% endblock %}

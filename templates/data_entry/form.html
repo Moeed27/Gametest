@@ -1,27 +1,23 @@
 {% extends "base.html" %}
+{% block title %}Carbon Cruncher - Log Data{% endblock %}
 
 {% block content %}
-    <div class="container">
-    <h1>Type of Form</h1>
-    <div class="p-2 row">
-        <div class="col-2"></div>
-        <div class="col-8">
-            <form method="POST">
-                <div class="p-2 bg-light border border-primary" style="text-align: left">
+    
+<h1 class="text-center" style="padding-top: 50px; font-size: 50px">Type of log</h1>
+<h3 class="text-center" style="padding-top: 20px; font-size: 20px">What type of data are you trying to log?</h3>
 
-                    {{ form.csrf_token() }}
-                    <div class="form-group">
-                        {{ form.type.label}}<span style="color: red">*</span>
-                        {{ form.type(class="form-control") }}
-                    </div>
-                    <div>
-                        {{ form.submit(class="btn btn-success") }}
-                    </div>
-
-                </div>
-            </form>
-        </div>
-        <div class="col-2"></div>
-    </div>
+<div class="container text-center" style="width:50%;padding-top:50px;">
+    <a class="text-center text-decoration-none navicon-light" style="background-color: #8ad87d;width: 40%; border-radius: 25px 25px 25px 25px; margin: 0;  border: 4px; border-style: solid; border-color: #54834c; display: inline-block;"
+        href="{{url_for('data_entry.transport')}}"
+    >
+        <img src="{{url_for('static', filename='transportation.png')}}" width="40%"><br>
+        Transport
+    </a>
+    <a class="text-center text-decoration-none navicon-light" style="background-color: #8ad87d;width: 40%; display: inline-block; border-radius: 25px 25px 25px 25px; margin: 0;  border: 4px; border-style: solid; border-color: #54834c;"
+        href="{{url_for('data_entry.appliance')}}"
+    >
+        <img src="{{url_for('static', filename='washing-machine.png')}}" width="40%"><br>
+        Appliance
+    </a>
 </div>
 {% endblock %}

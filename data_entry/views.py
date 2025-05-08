@@ -32,9 +32,9 @@ def appliance():
         is_public = form.is_public.data
         start_time = form.start_time.data
         end_time = form.end_time.data
-        new_appliance = ApplianceTemplate(appliance_name=appliance_name, wattage=wattage, user_id=userid, is_public=is_public)
-        db.session.add(new_appliance)
+        new_appliance = ApplianceTemplate(template_name=appliance_name, wattage=wattage, user_id=userid, is_public=is_public)
         new_carbon_log = CarbonLog(template_type=LogTypes.appliance, start_time=start_time, end_time=end_time, user_id=userid)
+        db.session.add(new_appliance)
         db.session.add(new_carbon_log)
         db.session.commit()
         flash('Appliance form successfully submitted')
@@ -48,20 +48,33 @@ def transport():
         userid = current_user.get_id()
         mode_name=form.transport.data
         carbon_per_km = 0
-        if mode_name == 'car':
-            carbon_per_km = 132
-        elif mode_name == 'train':
+        if mode_name == 'Car (Petrol)':
+            carbon_per_km = 165
+        elif mode_name == 'Car (Diesel)':
+            carbon_per_km = 170
+        elif mode_name == 'Train':
             carbon_per_km = 32
-        elif mode_name == 'bus':
-            carbon_per_km = 93
-        is_public = form.is_public.data
+        elif mode_name == 'Bus':
+            carbon_per_km = 75
+        elif mode_name == 'Plane':
+            carbon_per_km = 246
+        elif mode_name == 'Motorbike':
+            carbon_per_km = 80
+        elif mode_name == 'Bicycle':
+            carbon_per_km = 21
+        is_public = form.is_public.data == "True"
         start_time = form.start_time.data
         end_time = form.end_time.data
-        new_transport = JourneyTemplate(mode_name=mode_name, user_id=current_user.get_id(), is_public=is_public,
+        distance_unit = form.distance_unit.data
+        distance = form.distance.data
+        if distance_unit == 'Miles':
+            distance = distance * 1.609
+        new_transport = JourneyTemplate(template_name=mode_name, user_id=current_user.get_id(), is_public=is_public,
                                         carbon_per_km=carbon_per_km)
-        new_carbon_log = CarbonLog(template_type=LogTypes.appliance, start_time=start_time, end_time=end_time,
-                                   user_id=userid, is_public=is_public)
         db.session.add(new_transport)
+        db.session.commit()
+        new_carbon_log = CarbonLog(template_type=LogTypes.trip, start_time=start_time, end_time=end_time,
+                                   user_id=userid, journey_distance=distance, template_id=new_transport.template_id)
         db.session.add(new_carbon_log)
         db.session.commit()
         flash('Transport form successfully submitted')

@@ -66,17 +66,13 @@ class Database:
     @staticmethod
     def setup(app, tunnel, testing=False):
         #Setup database
-        if not tunnel.tunnel_is_up:
-            Database.stop_tunnel(tunnel)
+
         user = os.getenv('DB_USER')
         password = os.getenv('DB_PASS')
         host = 'localhost'
         port = tunnel.local_bind_port
-        if testing:
-            dbname = os.getenv('TEST_DB_NAME')
-            app.config['TESTING'] = True
-        else:
-            dbname = os.getenv('DB_NAME')
+        dbname = os.getenv('DB_NAME')
+
         app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{user}:{password}@{host}:{port}/{dbname}"
         db = SQLAlchemy(app)
         #with app.app_context():

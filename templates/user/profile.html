@@ -1,5 +1,17 @@
 {% extends "base.html" %}
+{% block title %}Carbon Cruncher - Profile{% endblock %}
 
 {% block content %}
-    <h1>Profile Page</h1>
+<h1 class="text-center" style="padding-top: 50px; font-size: 50px">Profile</h1>
+<h3 class="text-center" style="padding-top: 20px; font-size: 20px">View your User Profile</h3>
+<div style="padding-top: 50px; width: 50%;" class="container text-center">
+    <h3>Username: {{current_user.username}}
+        {% if current_user.is_admin %}
+         [ADMIN]
+        {% endif %}
+    </h3>
+    <h3>Real name: {{current_user.first_name}} {{current_user.last_name}}</h3>
+    <h3>Email address: {{current_user.email}}</h3>
+    <h3><img src="{{url_for('static', filename='coin.png')}}" width="50px">Ecopoints: {{current_user.ecopoints}}</h3>
+</div>
 {% endblock %}

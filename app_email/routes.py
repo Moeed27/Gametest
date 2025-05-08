@@ -1,6 +1,7 @@
 from flask import current_app, render_template, request, redirect, url_for, flash
 from itsdangerous import BadSignature, SignatureExpired
-from database.tables import db, User  # Import the database and User model
+from database.tables import User  # Import the database and User model
+from config import db
 from app_email.utils import confirm_token
 from app_email import email_bp
 
