@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Carbon Cruncher - Global User Data{% endblock %}
+
+{% block content %}
+
+<h1 class="text-center" style="padding-top: 50px; font-size: 50px">Global User Data</h1>
+<h3 class="text-center" style="padding-top: 20px; font-size: 20px">Learn more about Carbon Cruncher and its users!</h3>
+
+<p class="text-center container" style = "width:50%; font-size: 20px;">
+    We created Carbon Cruncher to help encourage all people, young and old, to do a little every day to help the planet!
+    <br>
+    And help you did!
+</p>
+
+
+<h2 class="text-center" style="padding-top: 20px; font-size: 40px">Here's how Carbon Cruncher's users measure up to the UK average!</h2>
+
+<div class="container", style="width: 85%; padding: 0;">
+    <div class="container text-center", style="width: 60%; display: inline-block;">
+        <img width = "90%" src='data:image/png;base64,{{graph_data}}'/>
+    </div>
+    <div class="container text-center", style="width: 39%; background-color: #22222211; font-size: 30px; display: inline-block;">
+        That's less than <span style="color: red;">{{average_percentage}}%</span> of the national average. Keep up the good work!
+    </div>
+</div>
+
+<h2 class="text-center" style="padding-top: 20px; font-size: 40px">Here's our global leaders on ecopoints!</h2>
+
+<div class="container", style="width: 85%; padding: 0; padding-bottom: 100px;">
+    <div class="container text-center", style="width: 39%; background-color: #22222211; font-size: 30px; display: inline-block;">
+        As a community, we've currently got <span style="color: red;"> {{global_eco_points}} </span> ecopoints! Wowzers!
+    </div>
+    <div class="container text-center", style="width: 60%; display: inline-block;">
+        <!--Leaderboard goes here!-->
+    </div>
+</div>
+{% endblock %}

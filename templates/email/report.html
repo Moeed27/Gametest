@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Weekly Carbon Report</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.5; color: #333; }
+    .container { max-width: 600px; margin: auto; padding: 20px; }
+    .summary { background: #f8f9fa; padding: 15px; border-radius: 4px; }
+    .footer { margin-top: 30px; font-size: 0.8em; color: #666; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Hello {{ user.first_name or user.username }},</h2>
+    <p>Here is your carbon usage report for the week of {{ start_date }} to {{ end_date }}:</p>
+    <div class="summary">
+      <p><strong>Total Energy Used:</strong> {{ total_energy }} kWh</p>
+      <p><strong>Total CO₂ Emitted:</strong> {{ total_carbon }} kg</p>
+    </div>
+    <p>Keep tracking your progress and reduce your footprint!</p>
+    <div class="footer">
+      <p>Thank you for using Carbon Cruncher.</p>
+      <p>Carbon Cruncher Team</p>
+    </div>
+  </div>
+</body>
+</html>

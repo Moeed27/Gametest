@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Carbon Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            grid-template-rows: auto auto;
+            gap: 20px;
+        }
+
+        .card {
+            padding: 20px;
+            border-radius: 12px;
+            background-color: #f4f4f4;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #total-emissions {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #000000;
+        }
+
+        #dayDetail {
+            margin-top: 10px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Carbon Footprint Dashboard</h2>
+
+<div style="margin-bottom: 20px;">
+    <label for="yearSelect">Year:</label>
+    <input type="number" id="yearSelect" min="2000" max="2100" value="2025">
+
+    <label for="weekSelect">Week:</label>
+    <input type="number" id="weekSelect" min="1" max="53" value="1">
+
+    <button onclick="goToWeek()">View</button>
+</div>
+
+<div class="dashboard">
+
+    <div class="card" style="grid-column: 1; grid-row: 1;">
+        <div>Total Emissions</div>
+        <div id="total-emissions"><span id="totalEmissionValue">0</span> kg CO₂</div>
+    </div>
+
+    <div class="card" style="grid-column: 1; grid-row: 2;">
+        <div><strong>Emission Breakdown</strong></div>
+        <canvas id="emissionPieChart"></canvas>
+    </div>
+
+    <div class="card" style="grid-column: 2; grid-row: 1 / span 2;">
+        <div><strong>Emission History</strong></div>
+        <canvas id="emissionBarChart" height="200"></canvas>
+    </div>
+</div>
+
+<script>
+    function goToWeek() {
+        const year = document.getElementById('yearSelect').value;
+        const week = document.getElementById('weekSelect').value;
+
+        if (year && week >= 1 && week <= 53) {
+            window.location.href = `/graph/dashboard/${year}/${week}`;
+        } else {
+            alert("Please enter a valid year and week number (1–53).");
+        }
+    }
+
+    async function loadData() {
+        const pathParts = window.location.pathname.split('/');
+        const year = pathParts[3];
+        const week = pathParts[4];
+
+        document.getElementById("yearSelect").value = year;
+        document.getElementById("weekSelect").value = week;
+
+        const apiUrl = `/graph/weekly_emissions/${year}/${week}`;
+        const res = await fetch(apiUrl);
+        const data = await res.json();
+
+
+        const {labels, daily_emissions, breakdown_labels, breakdown_data} = data;
+
+        const total = daily_emissions.reduce((sum, v) => sum + v, 0);
+        document.getElementById("totalEmissionValue").innerText = total.toFixed(2);
+
+        new Chart(document.getElementById('emissionPieChart').getContext('2d'), {
+            type: 'pie',
+            data: {
+                labels: breakdown_labels,
+                datasets: [{
+                    data: breakdown_data,
+                    backgroundColor: ['#4caf50', '#8bc34a', '#cddc39', '#ff9800']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {legend: {position: 'bottom'}}
+            }
+        });
+
+        new Chart(document.getElementById('emissionBarChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Daily Emission (kg CO₂)',
+                    data: daily_emissions,
+                    backgroundColor: '#81c784'
+                }]
+            },
+            options: {
+                responsive: true,
+                onClick: (evt, elements) => {
+                    if (elements.length > 0) {
+                        const index = elements[0].index;
+                        const date = labels[index];
+                        const value = daily_emissions[index];
+                        document.getElementById("dayDetail").innerText = `📅 ${date} → ${value} kg CO₂`;
+                    }
+                },
+                scales: {
+                    y: {beginAtZero: true}
+                }
+            }
+        });
+    }
+
+    loadData();
+</script>
+<div id="dayDetail" style="margin-top: 10px; font-size: 1.2em;"></div>
+
+
+</body>
+</html>

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Carbon Cruncher - Sun Tracker{% endblock %}
+
+{% block content %}
+
+<style>
+    @keyframes progress_anim{
+        from {width: 0%;}
+        to {width: {{efficiency}}%;}
+    }
+
+    .efficiency_progress{
+        animation-name: progress_anim;
+        animation-duration: 2s;
+    }
+</style>
+
+<h1 class="text-center" style="padding-top: 50px; font-size: 50px">Sun Tracker</h1>
+<h3 class="text-center" style="padding-top: 20px; font-size: 20px">Press calculate to see how effective solar panels are in your area!</h3>
+<div class="container text-center" style="width: 50%;">
+<button onclick="calculate()" class="navicon-light" style="background-color: #8ad87d;width: 40%; border-radius: 25px 25px 25px 25px; margin: 0;  border: 4px; border-style: solid; border-color: #54834c; display: inline-block;">Calculate!</button>
+{% if error %}
+This area is over the sea!<br>Please try again!
+{% endif %}
+<h3 class="text-center" id="calculate_error"></h3>
+</div>
+{% if success %}
+<div class="container text-center align-center" style="width:50%; padding-top:30px;">
+
+    Current Latitude: {{latitude}}<br>
+    Current Longitude: {{longitude}}<br><br>
+
+    In your area, solar panels are <br>
+    <div class="progress" style="height: 50px; width: 100%">
+        <div class="progress-bar bg-success efficiency_progress" role="progressbar" style="width: {{efficiency}}%" aria-valuenow="{{efficiency}}" aria-valuemin="0" aria-valuemax="100">{{efficiency}}% efficient!</div>
+    </div>
+</div>
+<div  class="container text-center align-center">
+    <img width="40%" src='data:image/png;base64,{{azimuthPie}}'/>
+    <img width="40%" src='data:image/png;base64,{{slopePie}}'/>
+    <br>
+    The best month for solar panels in your area is {{best_month}} with {{best_em}}kWh <br>
+    <br>
+    <img width = "90%" src='data:image/png;base64,{{graph}}'/>
+</div>
+{% endif %}
+
+<script>
+    error_text = document.getElementById("calculate_error")
+
+    function calculate(){
+        if(navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(success, error);
+        }
+        else{
+            error_text.innerHTML = "Sorry, geolocation isn't supported by your browser!"
+        }
+    }
+
+    function success(position){
+        window.location.href = `/sunTracker?lat=${position.coords.latitude}&lon=${position.coords.longitude}`;
+        //alert(`latitude=${position.coords.latitude} longitude=${position.coords.longitude}`);
+    }
+
+    function error(){
+        error_text.innerHTML = "Sorry, this didn't work! Please try again."
+    }
+</script>
+{% endblock %}

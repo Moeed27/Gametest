@@ -1,0 +1,31 @@
+# Core Functionality
+flask
+requests
+flask-login
+flask_qrcode
+flask-wtf
+
+# Database
+sshtunnel
+pymysql
+sqlalchemy
+flask-sqlalchemy
+
+# User
+WTForms~=3.2.1
+Flask-Login~=0.6.3
+pyotp~=2.9.0
+argon2-cffi
+
+# Tetsting
+pytest
+flask-testing
+
+# env
+python-dotenv
+
+# Email
+email-validator
+
+# Testing
+pytest
